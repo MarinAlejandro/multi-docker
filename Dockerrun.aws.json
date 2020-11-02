@@ -1,0 +1,36 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+        {
+            "name": "client",
+            "image": "marinalejandro/multi-client",
+            "hostname": "client",
+            "esential": false
+        },
+        {
+            "name": "server",
+            "image": "marinalejandro/multi-server",
+            "hostname": "api",
+            "esential": false         
+        },
+        {
+            "name": "worker",
+            "image": "marinalejandro/multi-worker",
+            "hostname": "worker",
+            "esential": false         
+        },
+        {
+            "name": "nginx",
+            "image": "marinalejandro/multi-nginx",
+            "hostname": "nginx",
+            "esential": true,
+            "portMappings": [
+                {
+                    "hostPort": 80,
+                    "containerPort": 80
+                }
+            ],
+            "links": ["client", "server"]
+        }
+    ]
+}
