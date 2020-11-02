@@ -1,0 +1,18 @@
+sudo: required
+services: 
+    - docker
+before_install:
+    - docker build -t marinalejandro/react-test -f ./client/Dockerflie.dev ./client
+script:
+    - docker run -e CI=true marinalejandro/react-test npm test -- --coverage
+after_success:
+    - docker build -t marinalejandro/multi-client ./client 
+    - docker build -t marinalejandro/multi-nginx ./nginx
+    - docker build -t marinalejandro/mult-server ./server
+    - docker build -t marinalejandro/multi-worker ./worker
+
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    - docker push marinalejandro/multi-client
+    - docker push marinalejandro/multi-nginx
+    - docker push marinalejandro/multi-server
+    - docker push marinalejandro/multi-worker
